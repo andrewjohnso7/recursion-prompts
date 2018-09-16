@@ -394,7 +394,7 @@ var reverseArr = function(array) {
   arr = arr.concat(reverseArr(array))
   return arr;
 };
-console.log(reverseArr([1,2,3]));
+// console.log(reverseArr([1,2,3]));
 
 
 // 18. Create a new array with a given value and length.
@@ -502,7 +502,7 @@ var countOccurrence = function(array, value) { // ([2, 'banana', 2], 2)
 
   return total
 };
-console.log(countOccurrence(['banana', 2, 'banana'], 'banana'));
+// console.log(countOccurrence(['banana', 2, 'banana'], 'banana'));
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 /* 
@@ -511,7 +511,7 @@ map applies a callback to each item in the array. and then returns an array
 let timesTwo = function(item){
   return item * 2
 }
-console.log(timesTwo(3)); // 6
+// console.log(timesTwo(3)); // 6
 var rMap = function(array, callback) { // [1,2,3]
 let arr = []; // []
   if(array.length === 0){ // 3
@@ -521,28 +521,117 @@ let arr = []; // []
   arr = arr.concat(rMap(array.slice(1), callback));
   return arr;
 };
-let original = [1,2,3];
-console.log(rMap(original, timesTwo))
-console.log(timesTwo(original[0]))
+// let original = [1,2,3];
+// console.log(rMap(original, timesTwo))
+// console.log(timesTwo(original[0]))
 
 // 22. Write a function that counts the number of times a key occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
-var countKeysInObj = function(obj, key) {
+/*
+inputs: an object and a key
+outputs: a number
+constraints: use recursion
+
+Strategy:
+create a counter variable set at zero (maybe an object)
+  for in loop 
+    if the element matches the input key
+      add one to the counter
+    if typeof obj[element] is an object
+      recurse on the object. 
+  return counter 
+*/
+  //  let originally = {
+  //   'e':{'x':'y'},
+  //   't':{
+  //       'r':{'e':'r'},
+  //       'p':{'y':'r'}
+  //       },
+  //   'y':'e'};
+var countKeysInObj = function(obj, key) {  
+let count = 0; // 0 // 0
+  for(var el in obj){ // 'e': {'x': 'y'} // {'x': 'y'}
+    if(key === el){ // 'e' === 'e' // false 
+    count++ // 1
+    }
+    if(typeof obj[el] === 'object'){ // true // false
+    count += countKeysInObj(obj[el], key); // countKeysInobj({'x': 'y'}) 
+    }
+  }
+return count
 };
 
+// console.log(countKeysInObj(originally, 'e'))
+// console.log(countKeysInObj(originally, 'e'));
 // 23. Write a function that counts the number of times a value occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
+// same as above?
+  // create a count variable
+  // for in loop
+    // if the values match
+      // add one to the count
+    // if the value is an object
+      // count += recursion
+  // exit loop
+  // return count variable
+  // let originally = {
+  //   'e':{'x':'y'},
+  //   't':{
+  //       'r':{'e':'r'},
+  //       'p':{'y':'r'}
+  //       },
+  //   'y':'e'};
+
 var countValuesInObj = function(obj, value) {
+  let count = 0;
+  for(var key in obj){
+    if(obj[key] === value){
+      count++
+    }
+    if(typeof obj[key] === 'object'){
+      count += countValuesInObj(obj[key], value);
+    }
+  }
+  return count;
 };
+
+// console.log(countValuesInObj(originally, 'r'));
+
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
+/* 
+  inputs: an object, a key, and the key that you want the other key to be.
+  outputs: an object
+  constraints: use recursion, preserve the values stored at the original key
+
+Strategy: 
+basecase: when you find a key that matches the input key
+recursive case: when you find a property that is an object
+
+for in loop?
+start small
+*/
+let original = {r: 'Som', s:'Audrey', c: 'Daniel', e:{r:'Stephanie'}}
+console.log(original)
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  for(var key in obj){
+    if(key === oldKey){
+      // console.log(obj[key])
+      obj[newKey] = obj[key];
+      delete obj[key];
+    }
+    if(typeof obj[key] === 'object'){
+      replaceKeysInObj(obj[key], oldKey, newKey)
+    }
+  }
+  return obj;
 };
+console.log(replaceKeysInObj(original, 'e', 'p'))
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
 // number is the sum of the previous two.
@@ -635,6 +724,10 @@ var augmentElements = function(array, aug) {
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
+  /*
+  if array length is zero return []
+  i
+  */
 var minimizeZeroes = function(array) {
 };
 
@@ -648,10 +741,45 @@ var alternateSign = function(array) {
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
+/* 
+  if anything in the array is a num have it be a condition?
+  if array length is zero return []
+  recursive concatenation?
+
+split the string? 
+  create an empty array.
+  iterate over the current split
+    evaluate if the first value in the split is a number
+      if the value is between 1-10 push the number representation into the array?
+      if the value is just a string, push the string into the array
+      recurse on the joined version of the next word?
+*/
+
+let other = '1 I am trying to recurse here';
 var numToText = function(str) {
+let arr = [];
+let spArr = str.split(' ')
+  if(spArr.length === 0){
+    return [];
+  }
+  if(spArr[0] === '1'){
+    arr.push('one');
+  }
+  if(!spArr[0] === '1'){
+    arr.push(spArr[0]);
+  }
+let joined = spArr.slice(1).join(' ');
+joined
+arr = arr.concat(numToText(joined));;
+return arr;
 };
-
-
+console.log(numToText(other))
+// let split = other.split(' ');
+// split
+// let join = split.join(' ');
+// join 
+let what = 1 == '1'
+what
 // *** EXTRA CREDIT ***
 
 // 37. Return the number of times a tag occurs in the DOM.
